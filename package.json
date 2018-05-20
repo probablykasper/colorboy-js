@@ -1,6 +1,6 @@
 {
   "name": "colorboy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Easy terminal coloring for Node.js, macOS/Linux",
   "main": "index.js",
   "repository": {
