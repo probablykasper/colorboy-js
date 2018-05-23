@@ -1,68 +1,114 @@
-function addColor(name, start, end = "\x1b[0m") {
-    global.String.prototype.__defineGetter__(name, function() {
-        let str = this;
-        str = str.replace("\n", end+"\n"+start);
-        str = start+str+end;
-        return str;
-    });
-}
-module.exports = (ignore = false, customColors = []) => {
-    if (!ignore) {
-        addColor("bold", "\x1b[1m");
-        addColor("dim", "\x1b[2m");
-        addColor("underline", "\x1b[4m");
-        addColor("blink", "\x1b[5m");
-        addColor("reverse", "\x1b[7m");
-        addColor("hidden", "\x1b[8m");
-
-        addColor("black", "\x1b[30m");
-        addColor("red", "\x1b[31m");
-        addColor("green", "\x1b[32m");
-        addColor("yellow", "\x1b[33m");
-        addColor("blue", "\x1b[34m");
-        addColor("magenta", "\x1b[35m");
-        addColor("cyan", "\x1b[36m");
-        addColor("white", "\x1b[37m");
-
-        addColor("blackBG", "\x1b[40m");
-        addColor("redBG", "\x1b[41m");
-        addColor("greenBG", "\x1b[42m");
-        addColor("yellowBG", "\x1b[43m");
-        addColor("blueBG", "\x1b[44m");
-        addColor("magentaBG", "\x1b[45m");
-        addColor("cyanBG", "\x1b[46m");
-        addColor("whiteBG", "\x1b[47m");
+const chalk = require("chalk");
+// console.log(chalk.rgb(255, 136, 0).bold('Orange!'));
+// console.log(chalk["bold"]('Orange!'));
+// console.log(chalk.rgb(255, 136, 0)("Orange!"));
+// console.log(chalk.bold.rgb(10, 100, 200)('Hello!'));
+// function addColor(name, color1, color2, color3, colorType = "rgb") {
+function getColorType(color) {
+    if (Array.isArray(color) && color.length == 1) color = color[0];
+    if (typeof color == "string") {
+        if (color.startsWith("#")) return "hex";
+        return "keyword";
+    } else if (Array.isArray(color)) {
+        if (color.length == 3) return "rgb";
+        if (color.length != 4) throw new Error("colorboy: invalid color. Array needs to have 3 or 4 arguments.");
+        if (color[3] == "rgb") return "rgb";
+        if (color[3] == "hsl") return "hsl";
+        if (color[3] == "hsv") return "hsv";
+        if (color[3] == "hwb") return "hwb";
+        if (color.length != 4) throw new Error("colorboy: invalid color. Color type specified has to be rgb, hsl, hsv or hwb.");
     }
-    if (customColors) {
-        for (let i = 0; i < customColors.length; i++) {
-            addColor(customColors[i][0], customColors[i][1]);
+}
+function getStyleType(style) {
+    switch(style) {
+        case "reset":
+        case "bold":
+        case "dim":
+        case "italic":
+        case "underline":
+        case "inverse":
+        case "hidden":
+        case "strikethrough":
+        case "visible":
+            return style;
+        default:
+            throw new Error("colorboy: invalid style. Must be reset, bold, dim, italic, underline, inverse, hidden, strikethrough or visible.")
+    }
+}
+function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
+function coloration(str, options = {}) {
+    let result = chalk;
+    const color = options.color;
+    const bgColor = options.bgColor;
+    const styles = options.styles;
+    if (color) {
+        const colorType = getColorType(color);
+        result = result[colorType](color);
+    }
+    if (bgColor) {
+        const colorType = "bg"+capitalizeFirstLetter(getColorType(bgColor));
+        result = result[colorType](bgColor);
+        result = result[colorType](bgColor);
+    }
+    if (styles) {
+        if (typeof styles == "string") {
+            result = result[getStyleType(styles)];
+        } else if (Array.isArray(styles)) {
+            for (let i = 0; i < styles.length; i++) {
+                result = result[getStyleType(styles[i])];
+            }
+        } else {
+            throw new Error("invalid styles.");
         }
     }
+    return result(str);
+}
+const colorboy = {
+    addColorFunction: function(name, getOptionsCallback) {
+        Object.defineProperty(global.String.prototype, name, {
+            value: function(...args) {
+                return coloration(this, getOptionsCallback(...args));
+            }
+        });
+        return colorboy;
+    },
+    addColor: function(name, options) {
+        Object.defineProperty(global.String.prototype, name, {
+            get: function() {
+                if (typeof options == "function") options = options(this);
+                return coloration(this, options);
+            }
+        });
+        return colorboy;
+    },
+    addDefaults: function() {
+        colorboy.addColorFunction("color", function(color, bgColor, ...styles) {
+            return {
+                color: color,
+                bgColor: bgColor,
+                styles: styles,
+            }
+        });
+        colorboy.addColorFunction("bgColor", function(color) {
+            return {
+                bgColor: color,
+            };
+        });
+        colorboy.addColorFunction("style", function(color) {
+            return {
+                styles: color,
+            };
+        });
+        return colorboy;
+    }
 }
 
-// Reset = "\x1b[0m"
-// Bright = "\x1b[1m"
-// Dim = "\x1b[2m"
-// Italic = "\x1b[3m"
-// Underscore = "\x1b[4m"
-// Blink = "\x1b[5m"
-// Reverse = "\x1b[7m"
-// Hidden = "\x1b[8m"
-//
-// FgBlack = "\x1b[30m"
-// FgRed = "\x1b[31m"
-// FgGreen = "\x1b[32m"
-// FgYellow = "\x1b[33m"
-// FgBlue = "\x1b[34m"
-// FgMagenta = "\x1b[35m"
-// FgCyan = "\x1b[36m"
-// FgWhite = "\x1b[37m"
-//
-// BgBlack = "\x1b[40m"
-// BgRed = "\x1b[41m"
-// BgGreen = "\x1b[42m"
-// BgYellow = "\x1b[43m"
-// BgBlue = "\x1b[44m"
-// BgMagenta = "\x1b[45m"
-// BgCyan = "\x1b[46m"
-// BgWhite = "\x1b[47m"
+// console.log(
+//     "hey".color("#04FFE8"),
+//     "hey".color("black", "white", "bold", "italic", "underline"),
+//     "hey".cyan
+// );
+
+module.exports = colorboy;
