@@ -1,9 +1,3 @@
-const chalk = require("chalk");
-// console.log(chalk.rgb(255, 136, 0).bold('Orange!'));
-// console.log(chalk["bold"]('Orange!'));
-// console.log(chalk.rgb(255, 136, 0)("Orange!"));
-// console.log(chalk.bold.rgb(10, 100, 200)('Hello!'));
-// function addColor(name, color1, color2, color3, colorType = "rgb") {
 function getColorType(color) {
     if (Array.isArray(color) && color.length == 1) color = color[0];
     if (typeof color == "string") {
@@ -38,11 +32,12 @@ function getStyleType(style) {
 function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
 }
+const chalk = require("chalk");
 function coloration(str, options = {}) {
     let result = chalk;
     const color = options.color;
     const bgColor = options.bgColor;
-    const styles = options.styles;
+    const style = options.style;
     if (color) {
         const colorType = getColorType(color);
         result = result[colorType](color);
@@ -50,23 +45,22 @@ function coloration(str, options = {}) {
     if (bgColor) {
         const colorType = "bg"+capitalizeFirstLetter(getColorType(bgColor));
         result = result[colorType](bgColor);
-        result = result[colorType](bgColor);
     }
-    if (styles) {
-        if (typeof styles == "string") {
-            result = result[getStyleType(styles)];
-        } else if (Array.isArray(styles)) {
-            for (let i = 0; i < styles.length; i++) {
-                result = result[getStyleType(styles[i])];
+    if (style) {
+        if (typeof style == "string") {
+            result = result[getStyleType(style)];
+        } else if (Array.isArray(style)) {
+            for (let i = 0; i < style.length; i++) {
+                result = result[getStyleType(style[i])];
             }
         } else {
-            throw new Error("invalid styles.");
+            throw new Error("invalid style.");
         }
     }
     return result(str);
 }
 const colorboy = {
-    addColorFunction: function(name, getOptionsCallback) {
+    addColorFunction: (name, getOptionsCallback) => {
         Object.defineProperty(global.String.prototype, name, {
             value: function(...args) {
                 return coloration(this, getOptionsCallback(...args));
@@ -74,7 +68,7 @@ const colorboy = {
         });
         return colorboy;
     },
-    addColor: function(name, options) {
+    addColor: (name, options) => {
         Object.defineProperty(global.String.prototype, name, {
             get: function() {
                 if (typeof options == "function") options = options(this);
@@ -83,32 +77,39 @@ const colorboy = {
         });
         return colorboy;
     },
-    addDefaults: function() {
-        colorboy.addColorFunction("color", function(color, bgColor, ...styles) {
-            return {
-                color: color,
-                bgColor: bgColor,
-                styles: styles,
-            }
-        });
-        colorboy.addColorFunction("bgColor", function(color) {
-            return {
-                bgColor: color,
-            };
-        });
-        colorboy.addColorFunction("style", function(color) {
-            return {
-                styles: color,
-            };
-        });
+    addDefaults: (functions = true, colors = true, styles = true) => {
+        if (functions) {
+            colorboy.addColorFunction("color", (color, bgColor, ...styles) => {
+                return {
+                    color: color,
+                    bgColor: bgColor,
+                    style: styles,
+                }
+            });
+            colorboy.addColorFunction("bgColor", (color) => ({bgColor:color}));
+            colorboy.addColorFunction("style", (color) => ({style:color}));
+        }
+        if (colors) {
+            colorboy.addColor("red", {color:"red"});
+            colorboy.addColor("black", {color:"black"});
+            colorboy.addColor("green", {color:"green"});
+            colorboy.addColor("yellow", {color:"yellow"});
+            colorboy.addColor("blue", {color:"blue"});
+            colorboy.addColor("pink", {color:"magenta"});
+            colorboy.addColor("cyan", {color:"cyan"});
+            colorboy.addColor("white", {color:"white"});
+            colorboy.addColor("gray", {color:"gray"});
+        }
+        if (styles) {
+            colorboy.addColor("bold", {style:"bold"});
+            colorboy.addColor("dim", {style:"dim"});
+            colorboy.addColor("italic", {style:"italic"});
+            colorboy.addColor("underline", {style:"underline"});
+            colorboy.addColor("inverse", {style:"inverse"});
+            colorboy.addColor("strikethrough", {style:"strikethrough"});
+        }
         return colorboy;
     }
 }
-
-// console.log(
-//     "hey".color("#04FFE8"),
-//     "hey".color("black", "white", "bold", "italic", "underline"),
-//     "hey".cyan
-// );
 
 module.exports = colorboy;

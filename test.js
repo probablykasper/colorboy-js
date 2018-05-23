@@ -1,11 +1,10 @@
 // require("./index.js")();
 
-
 require("./index.js")
     .addDefaults()
     .addColor("sexy", {
-        color: "#2EDFD4",
-        bgColor: "red",
+        color: "#000000",
+        bgColor: "#00FE7C",
         styles: ["bold", "underline"],
     })
     .addColorFunction("shit", (color, bgColor) => {
@@ -14,15 +13,11 @@ require("./index.js")
             bgColor: bgColor,
         }
     })
-console.log("mhmmmm".sexy);
-console.log("mhmmmm".shit("#000000", [255,255,0]));
 
-// console.log("color".color());
+console.log(`line1
+line2
+line3`.color("#0066FF", null));
 
-// console.log(`line1
-// line2
-// line3`.blue);
-
-// console.log("this is colored".bold.underline.cyan);
-
-// console.log("color".crazy,"boy".lightblue);
+console.log("Globgogabgalab".red);
+console.log("Potato chips".cyan.underline.italic);
+console.log("The Eden Project".color("#067CB6").bgColor([25, 25, 150]).bold);
