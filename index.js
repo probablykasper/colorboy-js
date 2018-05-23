@@ -8,7 +8,7 @@ function addColor(name, start, end = "\x1b[0m") {
 }
 module.exports = (ignore = false, customColors = []) => {
     if (!ignore) {
-        addColor("bright", "\x1b[1m");
+        addColor("bold", "\x1b[1m");
         addColor("dim", "\x1b[2m");
         addColor("underline", "\x1b[4m");
         addColor("blink", "\x1b[5m");
@@ -43,6 +43,7 @@ module.exports = (ignore = false, customColors = []) => {
 // Reset = "\x1b[0m"
 // Bright = "\x1b[1m"
 // Dim = "\x1b[2m"
+// Italic = "\x1b[3m"
 // Underscore = "\x1b[4m"
 // Blink = "\x1b[5m"
 // Reverse = "\x1b[7m"
