@@ -1,23 +1,24 @@
 // require("./index.js")();
 
+// screenshot1
+// require("./index.js").addDefaults();
+// console.log("Globgogabgalab".red);
+// console.log("Potato chips".cyan.underline.italic);
+// console.log("The Eden Project".color("#067CB6").bgColor([25, 25, 150]).bold);
+
+// screenshot2
+let currentColor = "red";
 require("./index.js")
-    .addDefaults()
-    .addColor("sexy", {
+    .addColor("greenish", {
         color: "#000000",
         bgColor: "#00FE7C",
-        styles: ["bold", "underline"],
+        style: ["bold", "italic"],
     })
-    .addColorFunction("shit", (color, bgColor) => {
+    .addColorFunction("error", (color) => {
         return {
             color: color,
-            bgColor: bgColor,
+            bgColor: currentColor,
         }
     })
-
-console.log(`line1
-line2
-line3`.color("#0066FF", null));
-
-console.log("Globgogabgalab".red);
-console.log("Potato chips".cyan.underline.italic);
-console.log("The Eden Project".color("#067CB6").bgColor([25, 25, 150]).bold);
+console.log("Unlike Pluto".greenish);
+console.log("Unlike Pluto".error("white"));

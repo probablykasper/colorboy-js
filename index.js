@@ -60,10 +60,10 @@ function coloration(str, options = {}) {
     return result(str);
 }
 const colorboy = {
-    addColorFunction: (name, getOptionsCallback) => {
+    addColorFunction: (name, optionsCallback) => {
         Object.defineProperty(global.String.prototype, name, {
             value: function(...args) {
-                return coloration(this, getOptionsCallback(...args));
+                return coloration(this, optionsCallback(...args));
             }
         });
         return colorboy;
