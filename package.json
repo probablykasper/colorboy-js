@@ -1,11 +1,15 @@
 {
   "name": "colorboy",
   "version": "2.0.0",
-  "description": "Easy terminal coloring for Node.js, macOS/Linux",
+  "description": "Easily add color to your console.log in Node.js",
   "main": "index.js",
+  "homepage": "https://github.com/probablykasper/colorboy-js#readme",
+  "bugs": {
+    "url": "https://github.com/probablykasper/colorboy-js/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SpectralKH/colorboy.git"
+    "url": "git+https://github.com/probablykasper/colorboy-js.git"
   },
   "scripts": {
     "test": "node test.js"
@@ -20,10 +24,7 @@
     "macos",
     "linux"
   ],
-  "author": "KH",
-  "bugs": {
-    "url": "https://github.com/SpectralKH/colorboy/issues"
-  },
+  "author": "kasper.space (https://kasper.space)",
   "license": "MIT",
   "dependencies": {
     "chalk": "2.4"
