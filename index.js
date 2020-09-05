@@ -10,7 +10,7 @@ function getColorType(color) {
         if (color[3] == "hsl") return "hsl";
         if (color[3] == "hsv") return "hsv";
         if (color[3] == "hwb") return "hwb";
-        if (color.length != 4) throw new Error("colorboy: invalid color. Color type specified has to be rgb, hsl, hsv or hwb.");
+        throw new Error("colorboy: invalid color. Color type specified has to be rgb, hsl, hsv or hwb.");
     }
 }
 function getStyleType(style) {
