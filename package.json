@@ -1,6 +1,6 @@
 {
   "name": "colorboy",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Easily add color to your console.log in Node.js",
   "main": "index.js",
   "homepage": "https://github.com/probablykasper/colorboy-js#readme",
