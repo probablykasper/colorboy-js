@@ -21,10 +21,10 @@
     "linux"
   ],
   "author": "KH",
-  "license": "ISC",
   "bugs": {
     "url": "https://github.com/SpectralKH/colorboy/issues"
   },
+  "license": "MIT",
   "dependencies": {
     "chalk": "2.4"
   }

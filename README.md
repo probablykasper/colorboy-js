@@ -2,8 +2,8 @@
 Easily add color to your `console.log`s in Node.js.
 
 ## Installation
-```console
-$ npm install colorboy
+```
+npm install colorboy
 ```
 
 ## Usage
