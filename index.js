@@ -12,17 +12,18 @@ function getColorType(color) {
         if (color[3] === "hwb") return "hwb";
         throw new Error("colorboy: invalid color. Color type specified has to be rgb, hsl, hsv or hwb.");
     }
+    throw new Error('colorboy: Unknown color: '+color)
 }
 function getStyleType(style) {
     switch(style) {
-        case "reset":
         case "bold":
         case "dim":
         case "italic":
         case "underline":
         case "inverse":
-        case "hidden":
         case "strikethrough":
+        case "reset":
+        case "hidden":
         case "visible":
             return style;
         default:
@@ -88,13 +89,25 @@ const colorboy = {
     addDefaults: (functions = true, colors = true, styles = true) => {
         if (functions) {
             colorboy.addColorFunction("color", (color, bgColor, ...styles) => {
-                return {
-                    color: color,
-                    bgColor: bgColor,
-                    style: styles,
+              if ( typeof  color  === 'number'&& typeof bgColor === 'number'&& typeof styles[0] === 'number') {
+                if (styles[1]) {
+                  return { color: [color, bgColor, styles[0], styles[1]] }
+                } else {
+                  return { color: [color, bgColor, styles[0]] }
                 }
+              } else return {
+                color: color,
+                bgColor: bgColor,
+                style: styles,
+              }
             });
-            colorboy.addColorFunction("bgColor", (color) => ({bgColor:color}));
+            colorboy.addColorFunction("bgColor", (...args) => {
+              if (args.length === 1) {
+                return { bgColor: args[0] }
+              } else {
+                return { bgColor: args }
+              }
+            });
             colorboy.addColorFunction("style", (color) => ({style:color}));
         }
         if (colors) {

@@ -27,6 +27,6 @@
   "author": "kasper.space (https://kasper.space)",
   "license": "MIT",
   "dependencies": {
-    "chalk": "2.4"
+    "chalk": "^4.1.0"
   }
 }

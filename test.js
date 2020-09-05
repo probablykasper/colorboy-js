@@ -24,9 +24,9 @@ console.log('\nDefaults:\n');
 console.log('cyan underline italic'.cyan.underline.italic);
 console.log('color() keyword'.color('pink'));
 console.log('color() hex'.color('#bc5bd2'));
-console.log('color() rgb default'.color([188, 91, 210]));
-console.log('color() rgb'.color([188, 91, 210, 'rgb']));
-console.log('color() hsl'.color([289, 57, 59, 'hsl']));
-console.log('color() hwb'.color([289, 36, 18, 'hwb']));
-
-console.log('\nDefaults:\n');
+console.log('color() rgb default'.color(188, 91, 210));
+console.log('color() rgb'.color(188, 91, 210, 'rgb'));
+console.log('color() hsl'.color(289, 57, 59, 'hsl'));
+console.log('color() hwb'.color(289, 36, 18, 'hwb'));
+console.log('bgColor() hex'.bgColor('#bc5bd2'));
+console.log('bgColor() hsl'.bgColor(289, 57, 59, 'hsl'));
