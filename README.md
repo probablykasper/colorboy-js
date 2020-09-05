@@ -13,7 +13,7 @@ console.log("Globgogabgalab".red);
 console.log("Potato chips".cyan.underline.italic);
 console.log("The Eden Project".color("#067CB6").bgColor([25, 25, 150]).bold);
 ```
-![screenshot1](https://raw.githubusercontent.com/SpectralKH/colorboy/master/screenshot1.png)
+![screenshot1](./screenshot1.png)
 
 ### Colors
 A color can be:
@@ -39,23 +39,28 @@ A style can be a string, or an array of strings. These are the possible strings:
 
 ## Usage - Custom colors & styles
 ```js
-let currentColor = "red";
-require("colorboy")
-    .addColor("greenish", {
-        color: "#000000",
-        bgColor: "#00FE7C",
-        style: ["bold", "italic"],
-    })
-    .addColorFunction("error", (color) => {
-        return {
-            color: color,
-            bgColor: currentColor,
-        }
-    })
-console.log("Unlike Pluto".greenish);
-console.log("Unlike Pluto".error("white"));
+let currentBgColor = 'red';
+
+require('./index.js')
+  .addDefaults()
+  .addColor('greenish', {
+    color: '#000000',
+    bgColor: '#00FE7C',
+    style: ['bold', 'italic'],
+  })
+  .addColorFunction('error', (color) => {
+    return {
+      color: color,
+      bgColor: currentBgColor,
+    }
+  })
+console.log('Custom:');
+console.log('Unlike Pluto'.greenish);
+console.log('Unlike Pluto'.error('white'));
+currentBgColor = 'cyan'
+console.log('Unlike Pluto'.error('black'));
 ```
-![screenshot2](https://raw.githubusercontent.com/SpectralKH/colorboy/master/screenshot2.png)
+![screenshot2](./screenshot2.png)
 
 ### colorboy.addDefaults(functions, colors, styles)
 Adds the default colorboy colors & styles. Takes three optional arguments, all true by default.

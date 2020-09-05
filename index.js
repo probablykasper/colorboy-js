@@ -1,15 +1,15 @@
 function getColorType(color) {
-    if (Array.isArray(color) && color.length == 1) color = color[0];
-    if (typeof color == "string") {
+    if (Array.isArray(color) && color.length === 1) color = color[0];
+    if (typeof color === "string") {
         if (color.startsWith("#")) return "hex";
         return "keyword";
     } else if (Array.isArray(color)) {
-        if (color.length == 3) return "rgb";
-        if (color.length != 4) throw new Error("colorboy: invalid color. Array needs to have 3 or 4 arguments.");
-        if (color[3] == "rgb") return "rgb";
-        if (color[3] == "hsl") return "hsl";
-        if (color[3] == "hsv") return "hsv";
-        if (color[3] == "hwb") return "hwb";
+        if (color.length === 3) return "rgb";
+        if (color.length !== 4) throw new Error("colorboy: invalid color. Array needs to have 3 or 4 arguments.");
+        if (color[3] === "rgb") return "rgb";
+        if (color[3] === "hsl") return "hsl";
+        if (color[3] === "hsv") return "hsv";
+        if (color[3] === "hwb") return "hwb";
         throw new Error("colorboy: invalid color. Color type specified has to be rgb, hsl, hsv or hwb.");
     }
 }
@@ -35,19 +35,27 @@ function capitalizeFirstLetter(string) {
 const chalk = require("chalk");
 function coloration(str, options = {}) {
     let result = chalk;
-    const color = options.color;
+    let color = options.color;
     const bgColor = options.bgColor;
     const style = options.style;
     if (color) {
         const colorType = getColorType(color);
-        result = result[colorType](color);
+        if (Array.isArray(color)) {
+          result = result[colorType](...color);
+        } else {
+          result = result[colorType](color);
+        }
     }
     if (bgColor) {
         const colorType = "bg"+capitalizeFirstLetter(getColorType(bgColor));
-        result = result[colorType](bgColor);
+        if (Array.isArray(color)) {
+          result = result[colorType](...bgColor);
+        } else {
+          result = result[colorType](bgColor);
+        }
     }
     if (style) {
-        if (typeof style == "string") {
+        if (typeof style === "string") {
             result = result[getStyleType(style)];
         } else if (Array.isArray(style)) {
             for (let i = 0; i < style.length; i++) {
@@ -71,7 +79,7 @@ const colorboy = {
     addColor: (name, options) => {
         Object.defineProperty(global.String.prototype, name, {
             get: function() {
-                if (typeof options == "function") options = options(this);
+                if (typeof options === "function") options = options(this);
                 return coloration(this, options);
             }
         });
